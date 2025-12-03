@@ -15,7 +15,12 @@ class UserBase(BaseModel):
 
 class UserCreate(UserBase):
     """Schema for user registration."""
-    password: str = Field(..., min_length=6, description="Password must be at least 6 characters")
+    password: str = Field(
+        ...,
+        min_length=6,
+        max_length=72,
+        description="Password must be between 6-72 characters (bcrypt limit)"
+    )
 
 
 class UserLogin(BaseModel):
@@ -29,7 +34,13 @@ class UserUpdate(BaseModel):
     email: Optional[EmailStr] = None
     name: Optional[str] = None
     current_password: Optional[str] = Field(None, alias="currentPassword")
-    new_password: Optional[str] = Field(None, min_length=6, alias="newPassword")
+    new_password: Optional[str] = Field(
+        None,
+        min_length=6,
+        max_length=72,
+        alias="newPassword",
+        description="Password must be between 6-72 characters (bcrypt limit)"
+    )
 
     model_config = ConfigDict(populate_by_name=True)
 
