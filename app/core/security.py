@@ -10,7 +10,13 @@ from passlib.context import CryptContext
 from app.core.config import settings
 
 # Password hashing context
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# Configure bcrypt to automatically truncate passwords longer than 72 bytes
+pwd_context = CryptContext(
+    schemes=["bcrypt"],
+    deprecated="auto",
+    bcrypt__default_rounds=12,
+    bcrypt__truncate_error=False  # Disable error on passwords > 72 bytes
+)
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
