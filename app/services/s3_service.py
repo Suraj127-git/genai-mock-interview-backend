@@ -26,7 +26,9 @@ class S3Service:
 
         # Add endpoint_url if provided (for Railway Object Storage)
         if settings.AWS_ENDPOINT_URL:
-            client_config["endpoint_url"] = settings.AWS_ENDPOINT_URL
+            # Clean up endpoint URL - remove $ prefix if present
+            endpoint_url = settings.AWS_ENDPOINT_URL.lstrip("$")
+            client_config["endpoint_url"] = endpoint_url
 
         self.s3_client = boto3.client("s3", **client_config)
         self.bucket_name = settings.S3_BUCKET_NAME
