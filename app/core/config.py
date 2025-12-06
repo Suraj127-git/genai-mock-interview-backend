@@ -43,10 +43,36 @@ class Settings(BaseSettings):
     S3_BUCKET_NAME: Optional[str] = None
     S3_PRESIGNED_URL_EXPIRATION: int = 3600
 
-    # AI Services
+    # AI Services - OpenAI
     OPENAI_API_KEY: Optional[str] = None
     OPENAI_MODEL: str = "gpt-4o-mini"
     OPENAI_WHISPER_MODEL: str = "whisper-1"
+
+    # AI Services - Groq
+    GROQ_API_KEY: Optional[str] = None
+    GROQ_MODEL: str = "llama-3.3-70b-versatile"
+
+    # LangSmith (Observability)
+    LANGSMITH_TRACING: bool = False
+    LANGSMITH_ENDPOINT: Optional[str] = None
+    LANGSMITH_API_KEY: Optional[str] = None
+    LANGSMITH_PROJECT: str = "genai-mock-interview"
+
+    # Third-party AI Services
+    LIVEKIT_API_KEY: Optional[str] = None
+    LIVEKIT_API_SECRET: Optional[str] = None
+    LIVEKIT_URL: Optional[str] = None
+    CARTESIA_API_KEY: Optional[str] = None
+    MURF_API_KEY: Optional[str] = None
+
+    # Search Services (for RAG enhancement)
+    EXA_API_KEY: Optional[str] = None
+    SERPER_API_KEY: Optional[str] = None
+    TAVILY_API_KEY: Optional[str] = None
+
+    # Vector Database
+    CHROMA_PERSIST_DIR: str = "./chroma_db"
+    EMBEDDING_MODEL: str = "sentence-transformers/all-MiniLM-L6-v2"
 
     # Redis (Optional)
     REDIS_URL: str = "redis://localhost:6379/0"

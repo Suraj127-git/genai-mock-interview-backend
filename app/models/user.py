@@ -12,6 +12,8 @@ from app.db.base import Base
 if TYPE_CHECKING:
     from app.models.session import InterviewSession
     from app.models.upload import Upload
+    from app.models.user_profile import UserProfile
+    from app.models.ai_interview_session import AIInterviewSession
 
 
 class User(Base):
@@ -44,6 +46,17 @@ class User(Base):
     )
     uploads: Mapped[List["Upload"]] = relationship(
         "Upload",
+        back_populates="user",
+        cascade="all, delete-orphan"
+    )
+    profile: Mapped["UserProfile"] = relationship(
+        "UserProfile",
+        back_populates="user",
+        cascade="all, delete-orphan",
+        uselist=False
+    )
+    ai_sessions: Mapped[List["AIInterviewSession"]] = relationship(
+        "AIInterviewSession",
         back_populates="user",
         cascade="all, delete-orphan"
     )

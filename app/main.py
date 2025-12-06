@@ -12,7 +12,9 @@ from app.core.sentry import init_sentry
 from app.middleware.cors import setup_cors
 from app.middleware.error_handler import setup_error_handlers
 from app.middleware.sentry_middleware import setup_sentry_middleware
-from app.api.endpoints import auth, upload, sessions, ai, websocket, debug
+from app.middleware.rate_limiter import setup_rate_limiting
+from app.middleware.logging_middleware import setup_logging_middleware
+from app.api.endpoints import auth, upload, sessions, ai, websocket, debug, ai_interview
 
 # Setup logging
 setup_logging()
@@ -35,6 +37,18 @@ async def lifespan(app: FastAPI):
     logger.info(f"Environment: {settings.ENVIRONMENT}")
     logger.info(f"Debug mode: {settings.DEBUG}")
 
+    # Initialize LangSmith tracing
+    if settings.LANGSMITH_TRACING:
+        import os
+        os.environ["LANGSMITH_TRACING"] = "true"
+        if settings.LANGSMITH_ENDPOINT:
+            os.environ["LANGSMITH_ENDPOINT"] = settings.LANGSMITH_ENDPOINT
+        if settings.LANGSMITH_API_KEY:
+            os.environ["LANGSMITH_API_KEY"] = settings.LANGSMITH_API_KEY
+        if settings.LANGSMITH_PROJECT:
+            os.environ["LANGSMITH_PROJECT"] = settings.LANGSMITH_PROJECT
+        logger.info(f"LangSmith tracing enabled for project: {settings.LANGSMITH_PROJECT}")
+
     yield
 
     # Shutdown
@@ -50,10 +64,12 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# Setup middleware
+# Setup middleware (order matters - last added executes first)
 setup_cors(app)
-setup_sentry_middleware(app)
-setup_error_handlers(app)
+setup_logging_middleware(app)  # Logging first to capture all requests
+setup_rate_limiting(app)  # Rate limiting before processing
+setup_sentry_middleware(app)  # Sentry monitoring
+setup_error_handlers(app)  # Error handling last
 
 
 # Root endpoint
@@ -81,6 +97,7 @@ app.include_router(auth.router, prefix="/auth", tags=["Authentication"])
 app.include_router(upload.router, prefix="/upload", tags=["Upload"])
 app.include_router(sessions.router, prefix="/sessions", tags=["Sessions"])
 app.include_router(ai.router, prefix="/ai", tags=["AI"])
+app.include_router(ai_interview.router, prefix="/ai-interview", tags=["AI Interview"])
 app.include_router(websocket.router, prefix="/ws", tags=["WebSocket"])
 
 # Debug endpoints (only for testing Sentry)

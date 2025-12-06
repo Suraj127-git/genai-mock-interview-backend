@@ -1,0 +1,29 @@
+# Optional Dependencies
+# Only install these if you're using the specific features
+
+# LiveKit - Real-time Audio/Video Communication
+# Install if using video interviews with facial analysis
+livekit==0.17.5
+livekit-api==0.7.2
+
+# Redis - Distributed Caching and Rate Limiting
+# Install for production deployment with multiple instances
+redis==5.2.0
+
+# Celery - Background Task Queue
+# Install if implementing async background jobs
+celery==5.4.0
+
+# FAISS - Alternative Vector Database
+# Install if switching from ChromaDB to FAISS
+faiss-cpu==1.9.0
+
+# Anthropic - Alternative LLM Provider
+# Install if using Claude instead of GPT/Groq
+anthropic==0.39.0
+
+# Installation:
+# pip install -r requirements-optional.txt
+# Or selectively:
+# pip install livekit livekit-api  # For video features
+# pip install redis  # For distributed caching

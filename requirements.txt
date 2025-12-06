@@ -17,19 +17,46 @@ pydantic-settings==2.6.0
 
 # AWS S3
 boto3==1.35.36
-botocore==1.35.36
 
 # WebSocket
 websockets==13.1
 
 # AI/ML (for chat and transcription)
 openai==1.54.3
-# anthropic==0.39.0  # Alternative AI provider
+
+# LangChain Ecosystem (for AI Interview features)
+langchain==0.3.13
+langchain-community==0.3.13
+langchain-core==0.3.28
+langchain-openai==0.2.14
+langchain-groq==0.2.1
+langgraph==0.2.59
+langsmith==0.2.7
+
+# Vector Database & Embeddings (for RAG)
+sentence-transformers==3.3.1
+chromadb==0.5.23
+
+# Third-party AI Services
+groq==0.13.0
+
+# Additional Utilities for AI
+tiktoken==0.8.0
+tenacity==9.0.0
 
 # Monitoring & Logging
 sentry-sdk[fastapi]==2.17.0
 
 # Utilities
 httpx==0.27.2
-redis==5.2.0
-celery==5.4.0
+
+# ========================================
+# REMOVED - Not Currently Used
+# ========================================
+# botocore==1.35.36  # Installed automatically with boto3
+# anthropic==0.39.0  # Not used, only OpenAI and Groq
+# faiss-cpu==1.9.0  # Not used, ChromaDB is the vector store
+# livekit==0.17.5  # Optional, only if using real-time video
+# livekit-api==0.7.2  # Optional, only if using real-time video
+# redis==5.2.0  # Not used, in-memory rate limiting instead
+# celery==5.4.0  # Not used, no background tasks configured
